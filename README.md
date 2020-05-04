@@ -1,6 +1,6 @@
 # Typilus
 
-A deep learning algorithm for predicting types in Python.
+A deep learning algorithm for predicting types in Python. Please find a preprint [here](https://arxiv.org/abs/2004.10657).
 
 This repository contains its implementation (`src/`) and experiments (`exp/`).
 
