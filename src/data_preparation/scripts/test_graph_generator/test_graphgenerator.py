@@ -20,7 +20,8 @@ class TestGraphGenerator(unittest.TestCase):
 
     def test_decorated_functions(self):
         g = self.__get_generated_graph('../test_data/decorated_functions.py')
-        self.assertEqual(8, g['nodes'].count('FunctionDef'))
+        self.assertEqual(10, g['nodes'].count('FunctionDef'))
+        self.assertEqual(7, g['nodes'].count('@'))
 
 
 if __name__ == '__main__':

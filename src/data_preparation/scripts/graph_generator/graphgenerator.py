@@ -324,12 +324,26 @@ class AstGraphGenerator(NodeVisitor):
         self.__visit_variable_like(node.id, node.lineno, node.col_offset, can_annotate_here=None)
 
     def __enter_child_symbol_table(self, symtable_type: str, name: str, lineno: Optional[int]=None):
+        """
+        When there are function decorators, the lineno in symtable points to the line with `def`, while passed lineno
+        refers to the very first decorator. To resolve it, when there are available symbols with mismatched lineno,
+        we pick the nearest predecessor.
+        """
+        occurrences = []
         for child_symtable in self.__scope_symtable[-1].get_children():
-            if child_symtable.get_type() == symtable_type and child_symtable.get_name() == name and (lineno is None or child_symtable.get_lineno() == lineno):
+            if child_symtable.get_type() == symtable_type and child_symtable.get_name() == name:
+                occurrences.append(child_symtable)
+
+        if len(occurrences) == 0:
+            raise ValueError(f'Symbol Table for {name} of type {symtable_type} at {lineno} not found')
+
+        occurrences.sort(key=lambda table: table.get_lineno(), reverse=True)
+        for child_symtable in occurrences:
+            if lineno is not None and child_symtable.get_lineno() <= lineno:
                 self.__scope_symtable.append(child_symtable)
                 break
         else:
-            raise ValueError(f'Symbol Table for {name} of type {symtable_type} at {lineno} not found')
+            self.__scope_symtable.append(occurrences[-1])
 
 
     # region Function Parsing
