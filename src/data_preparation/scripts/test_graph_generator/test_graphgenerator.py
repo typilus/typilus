@@ -23,6 +23,10 @@ class TestGraphGenerator(unittest.TestCase):
         self.assertEqual(10, g['nodes'].count('FunctionDef'))
         self.assertEqual(7, g['nodes'].count('@'))
 
+    def test_nested_comprehension(self):
+        g = self.__get_generated_graph('../test_data/nested_comprehension.py')
+        self.assertEqual(11, g['nodes'].count('comprehension'))
+        self.assertEqual(8, g['nodes'].count('ListComp'))
 
 if __name__ == '__main__':
     unittest.main()
