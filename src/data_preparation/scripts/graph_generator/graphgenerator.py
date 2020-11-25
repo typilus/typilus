@@ -17,10 +17,10 @@ from typed_ast.ast3 import NodeVisitor, parse, AST, FunctionDef, AsyncFunctionDe
     Str, YieldFrom, Starred, Delete, Break, Continue, If, For, AsyncFor, While, Try, Assert, With, AsyncWith, Raise, \
     IfExp, Call
 
-from dataflowpass import DataflowPass
-from graphgenutils import EdgeType, TokenNode, StrSymbol, SymbolInformation
-from type_lattice_generator import TypeLatticeGenerator
-from typeparsing import parse_type_annotation_node, parse_type_comment, TypeAnnotationNode
+from .dataflowpass import DataflowPass
+from .graphgenutils import EdgeType, TokenNode, StrSymbol, SymbolInformation
+from .type_lattice_generator import TypeLatticeGenerator
+from .typeparsing import parse_type_annotation_node, parse_type_comment, TypeAnnotationNode
 
 
 class AstGraphGenerator(NodeVisitor):

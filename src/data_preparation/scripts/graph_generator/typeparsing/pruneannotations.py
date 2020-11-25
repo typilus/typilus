@@ -1,6 +1,6 @@
-from typeparsing.nodes import TypeAnnotationNode, SubscriptAnnotationNode, TupleAnnotationNode, ElipsisAnnotationNode, \
-    ListAnnotationNode, AttributeAnnotationNode, IndexAnnotationNode
-from typeparsing.visitor import TypeAnnotationVisitor
+from graph_generator.typeparsing.nodes import TypeAnnotationNode, SubscriptAnnotationNode, TupleAnnotationNode, \
+    ElipsisAnnotationNode, ListAnnotationNode, AttributeAnnotationNode, IndexAnnotationNode
+from graph_generator.typeparsing.visitor import TypeAnnotationVisitor
 
 __all__ = ['PruneAnnotationVisitor']
 

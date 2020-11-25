@@ -2,7 +2,7 @@ import typing
 from enum import Enum, auto
 from typing import Optional, NamedTuple, List, Dict
 
-from typeparsing import TypeAnnotationNode
+from .typeparsing import TypeAnnotationNode
 
 
 class EdgeType(Enum):

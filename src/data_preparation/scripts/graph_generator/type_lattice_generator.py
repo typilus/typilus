@@ -4,16 +4,16 @@ from itertools import chain
 from functools import lru_cache
 import json
 
-from typeparsing import TypeAnnotationNode, NameAnnotationNode, parse_type_annotation_node
-from typeparsing import RewriteRuleVisitor
-from typeparsing import DirectInheritanceRewriting
-from typeparsing import EraseOnceTypeRemoval
-from typeparsing import PruneAnnotationVisitor
-from typeparsing import AliasReplacementVisitor
-from typeparsing.rewriterules import RemoveStandAlones
-from typeparsing.rewriterules import RemoveRecursiveGenerics
-from typeparsing.rewriterules import RemoveUnionWithAnys
-from typeparsing.rewriterules import RemoveGenericWithAnys
+from .typeparsing import TypeAnnotationNode, NameAnnotationNode, parse_type_annotation_node
+from .typeparsing import RewriteRuleVisitor
+from .typeparsing import DirectInheritanceRewriting
+from .typeparsing import EraseOnceTypeRemoval
+from .typeparsing import PruneAnnotationVisitor
+from .typeparsing import AliasReplacementVisitor
+from .typeparsing.rewriterules import RemoveStandAlones
+from .typeparsing.rewriterules import RemoveRecursiveGenerics
+from .typeparsing.rewriterules import RemoveUnionWithAnys
+from .typeparsing.rewriterules import RemoveGenericWithAnys
 
 
 class TypeLatticeGenerator():

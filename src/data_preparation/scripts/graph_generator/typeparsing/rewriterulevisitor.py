@@ -1,9 +1,9 @@
 from typing import List
 
-from typeparsing.nodes import TypeAnnotationNode, SubscriptAnnotationNode, TupleAnnotationNode, ListAnnotationNode, \
-    AttributeAnnotationNode, IndexAnnotationNode, ElipsisAnnotationNode
-from typeparsing.rewriterules import RewriteRule
-from typeparsing.visitor import TypeAnnotationVisitor
+from graph_generator.typeparsing.nodes import TypeAnnotationNode, SubscriptAnnotationNode, TupleAnnotationNode, \
+    ListAnnotationNode, AttributeAnnotationNode, IndexAnnotationNode, ElipsisAnnotationNode
+from graph_generator.typeparsing.rewriterules import RewriteRule
+from graph_generator.typeparsing.visitor import TypeAnnotationVisitor
 
 
 class RewriteRuleVisitor(TypeAnnotationVisitor):

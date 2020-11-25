@@ -5,7 +5,7 @@ from typing import Any, Optional, Iterator
 import typed_ast
 from typed_ast.ast3 import parse
 
-from typeparsing.visitor import TypeAnnotationVisitor
+from graph_generator.typeparsing.visitor import TypeAnnotationVisitor
 
 __all__ = ['FaultyAnnotation', 'TypeAnnotationNode', 'SubscriptAnnotationNode', 'TupleAnnotationNode',
            'NameAnnotationNode', 'ListAnnotationNode', 'AttributeAnnotationNode', 'IndexAnnotationNode',

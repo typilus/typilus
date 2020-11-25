@@ -10,7 +10,7 @@ from typed_ast.ast3 import NodeVisitor, AST, FunctionDef, AsyncFunctionDef, Retu
     Starred, Delete, Break, Continue, If, For, AsyncFor, While, Try, Assert, With, AsyncWith, Raise, \
     IfExp
 
-from graphgenutils import EdgeType
+from .graphgenutils import EdgeType
 
 
 class DataflowPass(NodeVisitor):

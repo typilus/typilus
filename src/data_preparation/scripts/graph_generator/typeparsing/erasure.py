@@ -1,8 +1,8 @@
 from itertools import product
 
-from typeparsing.nodes import SubscriptAnnotationNode, TupleAnnotationNode, ListAnnotationNode, AttributeAnnotationNode, \
+from graph_generator.typeparsing.nodes import SubscriptAnnotationNode, TupleAnnotationNode, ListAnnotationNode, AttributeAnnotationNode, \
     IndexAnnotationNode, ElipsisAnnotationNode
-from typeparsing.visitor import TypeAnnotationVisitor
+from graph_generator.typeparsing.visitor import TypeAnnotationVisitor
 
 __all__ = ['EraseOnceTypeRemoval']
 

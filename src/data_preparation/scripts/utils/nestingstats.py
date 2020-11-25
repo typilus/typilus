@@ -2,8 +2,8 @@ import json
 import sys
 import numpy as np
 
-from typeparsing.nodes import parse_type_comment
-from typeparsing.visitor import TypeAnnotationVisitor
+from graph_generator.typeparsing.nodes import parse_type_comment
+from graph_generator.typeparsing.visitor import TypeAnnotationVisitor
 
 
 class NestingCounter(TypeAnnotationVisitor):

@@ -20,9 +20,9 @@ from glob import iglob
 from docopt import docopt
 import time
 
-from graphgenerator import AstGraphGenerator
-from type_lattice_generator import TypeLatticeGenerator
-from typeparsing import FaultyAnnotation
+from .graphgenerator import AstGraphGenerator
+from .type_lattice_generator import TypeLatticeGenerator
+from .typeparsing import FaultyAnnotation
 
 
 class Monitoring:
