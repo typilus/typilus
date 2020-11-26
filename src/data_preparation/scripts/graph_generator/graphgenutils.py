@@ -57,7 +57,7 @@ class SymbolInformation(NamedTuple):
 
 
 def prettyprint_graph(g: Dict):
-    g['token-sequence'] = [g['nodes'][ind] for ind in g['token-sequence']]
+    g['token-sequence'] = [f"{ind}_{g['nodes'][ind]}" for ind in g['token-sequence']]
     g['edges'] = {
         edge_type: {
             f"{v}_{g['nodes'][v]}": [f"{u}_{g['nodes'][u]}" for u in us]
