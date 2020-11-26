@@ -27,7 +27,23 @@ class TestGraphGenerator(unittest.TestCase):
             v_token = g['nodes'][v]
             for u in us:
                 u_token = g['nodes'][u]
-                self.assertEqual(v_token, u_token, f'{v_token} -> {u_token} is incorrect for edge type {edge_type}')
+                try:
+                    self.assertEqual(
+                        v_token, u_token,
+                        f'{v_token} -> {u_token} is incorrect for edge type {edge_type}'
+                    )
+                except AssertionError as e:
+                    if edge_type == 'OCCURRENCE_OF' and v_token == 'Attribute':
+                        # Attribute accesses (e.g., obj.attr) can be mapped to Attribute occurrences
+                        self.assertIn('.', u_token, f'v_token is {v_token} but {u_token} does not contain `.`')
+                    elif edge_type == 'OCCURRENCE_OF' and (v_token.startswith('__') or u_token.startswith('__')):
+                        # Private variables have their name expanded with _ClassName_
+                        if v_token.startswith('__'):
+                            self.assertIn(v_token, u_token, f'{v_token} not in {u_token} for {edge_type}')
+                        else:
+                            self.assertIn(u_token, v_token, f'{u_token} not in {v_token} for {edge_type}')
+                    else:
+                        raise e
 
     def _validate_next(self, g: Dict):
         if 'NEXT' not in g['edges']:
