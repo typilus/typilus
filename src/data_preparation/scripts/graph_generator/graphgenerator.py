@@ -564,9 +564,15 @@ class AstGraphGenerator(NodeVisitor):
 
         # TODO: Type aliases are of the form Vector=List[float] how do we parse these?
 
-        if node.type_comment is not None and len(node.targets) != 1:
-            assert False
+        # Fails for a chained assignment:
+        # a = b = c = expression # Type annotation
+        # Here the type annotation seems valid, while there are 3 assignment targets
+        # I think that the graph processing should not fail in this case, uncomment if you think the opposite
+        # if node.type_comment is not None and len(node.targets) != 1:
+        #     assert False
 
+        # When there are several targets, they represent a chained assignment, so we put `=` between them
+        # Tuple assignment (like a, b, c = [1, 2, 3]) will be represented by a single Tuple-target
         for i, target in enumerate(node.targets):
             if isinstance(target, Attribute) or isinstance(target, Name):
                 self.__visit_variable_like(target, target.lineno, target.col_offset, can_annotate_here=True,
@@ -578,7 +584,7 @@ class AstGraphGenerator(NodeVisitor):
 
             self._add_edge(target, node.value, EdgeType.COMPUTED_FROM)
             if i < len(node.targets) - 1:
-                self.add_terminal(TokenNode(','))
+                self.add_terminal(TokenNode('='))
 
         self.add_terminal(TokenNode('='))
         self.visit(node.value)
