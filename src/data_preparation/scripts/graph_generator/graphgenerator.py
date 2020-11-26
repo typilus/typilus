@@ -337,9 +337,13 @@ class AstGraphGenerator(NodeVisitor):
         if len(occurrences) == 0:
             raise ValueError(f'Symbol Table for {name} of type {symtable_type} at {lineno} not found')
 
-        occurrences.sort(key=lambda table: table.get_lineno(), reverse=True)
+        should_reverse = name in ['listcomp', 'dictcomp', 'setcomp', 'genexpr']
+        occurrences.sort(key=lambda table: table.get_lineno(), reverse=should_reverse)
         for child_symtable in occurrences:
-            if lineno is not None and child_symtable.get_lineno() <= lineno:
+            if lineno is not None and (
+                    (not should_reverse and child_symtable.get_lineno() >= lineno) or
+                    (should_reverse and child_symtable.get_lineno() <= lineno)
+            ):
                 self.__scope_symtable.append(child_symtable)
                 break
         else:
