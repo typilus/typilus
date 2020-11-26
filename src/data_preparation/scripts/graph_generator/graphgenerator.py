@@ -274,6 +274,9 @@ class AstGraphGenerator(NodeVisitor):
             self.__type_graph.add_type(type_annotation, self.__imported_symbols)
 
     def __get_symbol_for_name(self, name, lineno, col_offset):
+        """
+        Aside from strings and Attribute nodes, name can be Subscript. Skip annotation in this case.
+        """
         if isinstance(name, str):
             node = TokenNode(name, lineno, col_offset)
             self.add_terminal(node)
@@ -291,9 +294,8 @@ class AstGraphGenerator(NodeVisitor):
             else:
                 logging.warning(f'Symbol "{name}"@{lineno}:{col_offset} Not Found!')
                 symbol = None
-        else:
+        elif isinstance(name, Attribute):
             node = name
-            assert isinstance(node, Attribute)
             # Heuristic: create symbols only for attributes of the form X.Y and X.Y.Z
             self.visit(node.value)
             self.add_terminal(TokenNode('.', node.lineno, node.col_offset))
@@ -306,6 +308,11 @@ class AstGraphGenerator(NodeVisitor):
                 symbol = StrSymbol(name)
             else:
                 symbol = None
+        else:
+            node = name
+            symbol = None
+            self.visit(node)
+
         if isinstance(symbol, StrSymbol):
             symbol_type = 'variable'
         elif isinstance(symbol, Symbol):

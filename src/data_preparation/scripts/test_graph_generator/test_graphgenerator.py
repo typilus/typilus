@@ -96,6 +96,13 @@ class TestGraphGenerator(unittest.TestCase):
         g = self.__get_generated_graph('../test_data/same_level_lambdas.py')
         self._validate_all(g)
 
+    def test_annotated_subscript(self):
+        g = self.__get_generated_graph('../test_data/annotated_subscript.py')
+        self._validate_all(g)
+        self.assertEqual(1, g['nodes'].count('AnnAssign'))
+        self.assertEqual(1, g['nodes'].count('Subscript'))
+        self.assertEqual(1, g['nodes'].count('int_field'))
+
     def test_sanity_on_large_corpus(self):
         fnames = [fname for fname in iglob('../test_data/test_repositories/**/*.py', recursive=True)]
         for fname in tqdm(fnames):
