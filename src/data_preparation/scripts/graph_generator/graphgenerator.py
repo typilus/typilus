@@ -335,12 +335,12 @@ class AstGraphGenerator(NodeVisitor):
         """
         When there are function decorators, the lineno in symtable points to the line with `def`, while passed lineno
         refers to the very first decorator. To resolve it, when there are available symbols with mismatched lineno,
-        we pick the nearest predecessor.
+        we pick the nearest successor.
 
-        For the comprehension-like objects, the error can be the opposite and we should pick the successor.
+        For the comprehension-like objects, the error can be the opposite and we should pick the predecessor.
 
         When there are several alike elements at the same level (e.g., multiple lambdas) it's hard to choose between
-        them and we need some tweaks.
+        them and we need some tweaks: we pick the one which was used less times, among them -- the first one.
         """
         occurrences = []
         for child_symtable in self.__scope_symtable[-1].get_children():
