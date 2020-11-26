@@ -92,6 +92,10 @@ class TestGraphGenerator(unittest.TestCase):
         self.assertEqual(8, g['nodes'].count('ListComp'))
         self._validate_all(g)
 
+    def test_same_level_lambdas(self):
+        g = self.__get_generated_graph('../test_data/same_level_lambdas.py')
+        self._validate_all(g)
+
     def test_sanity_on_large_corpus(self):
         fnames = [fname for fname in iglob('../test_data/test_repositories/**/*.py', recursive=True)]
         for fname in tqdm(fnames):

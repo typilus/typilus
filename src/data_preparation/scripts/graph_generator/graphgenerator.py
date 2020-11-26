@@ -1,7 +1,7 @@
 import keyword
 import logging
 import re
-from collections import defaultdict
+from collections import defaultdict, Counter
 from symtable import symtable, Symbol
 from typing import Any, Dict, Optional, Set, Union, List, FrozenSet
 
@@ -35,6 +35,7 @@ class AstGraphGenerator(NodeVisitor):
 
         self.__ast = parse(source)
         self.__scope_symtable = [ symtable(source, 'file.py', 'exec') ]
+        self.__symtable_usage_count = Counter()
 
         self.__imported_symbols = {}  # type: Dict[TypeAnnotationNode, TypeAnnotationNode]
 
@@ -328,6 +329,11 @@ class AstGraphGenerator(NodeVisitor):
         When there are function decorators, the lineno in symtable points to the line with `def`, while passed lineno
         refers to the very first decorator. To resolve it, when there are available symbols with mismatched lineno,
         we pick the nearest predecessor.
+
+        For the comprehension-like objects, the error can be the opposite and we should pick the successor.
+
+        When there are several alike elements at the same level (e.g., multiple lambdas) it's hard to choose between
+        them and we need some tweaks.
         """
         occurrences = []
         for child_symtable in self.__scope_symtable[-1].get_children():
@@ -339,16 +345,26 @@ class AstGraphGenerator(NodeVisitor):
 
         should_reverse = name in ['listcomp', 'dictcomp', 'setcomp', 'genexpr']
         occurrences.sort(key=lambda table: table.get_lineno(), reverse=should_reverse)
+
+        closest_matching = []
         for child_symtable in occurrences:
             if lineno is not None and (
                     (not should_reverse and child_symtable.get_lineno() >= lineno) or
                     (should_reverse and child_symtable.get_lineno() <= lineno)
             ):
-                self.__scope_symtable.append(child_symtable)
-                break
-        else:
-            self.__scope_symtable.append(occurrences[-1])
+                # Pick all the closest symtables in the right direction
+                if len(closest_matching) == 0 or closest_matching[0].get_lineno() == child_symtable.get_lineno():
+                    closest_matching.append(child_symtable)
 
+        if len(closest_matching) == 0:
+            self.__scope_symtable.append(occurrences[-1])
+            self.__symtable_usage_count[occurrences[-1].get_id()] += 1
+        else:
+            # If there are multiple matching symtables (e.g., [lambda x: x, lambda: lambda x: x]), select the one that
+            # was used less times, since the order is right.
+            selected_table = min(closest_matching, key=lambda table: self.__symtable_usage_count[table.get_id()])
+            self.__scope_symtable.append(selected_table)
+            self.__symtable_usage_count[selected_table.get_id()] += 1
 
     # region Function Parsing
 
@@ -662,15 +678,11 @@ class AstGraphGenerator(NodeVisitor):
     def visit_Lambda(self, node: Lambda):
         self.add_terminal(TokenNode('lambda'))
 
-        try:
-            self.__enter_child_symbol_table('function', 'lambda', node.lineno)
-            self.visit(node.args)
-            self.add_terminal(TokenNode(':'))
-            self.visit(node.body)
-            self.__scope_symtable.pop()
-        except ValueError:
-            pass  # In the rare case of nexted lambdas symtable acts odd...
-
+        self.__enter_child_symbol_table('function', 'lambda', node.lineno)
+        self.visit(node.args)
+        self.add_terminal(TokenNode(':'))
+        self.visit(node.body)
+        self.__scope_symtable.pop()
 
     def visit_arg(self, node: arg):
         type_annotation = None
