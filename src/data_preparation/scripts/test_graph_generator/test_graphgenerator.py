@@ -1,9 +1,12 @@
 import unittest
+from glob import iglob
 from typing import Dict
 
 from dpu_utils.codeutils import split_identifier_into_parts
+from tqdm import tqdm
 
 from graph_generator.graphgenerator import AstGraphGenerator
+from graph_generator.graphgenutils import prettyprint_graph
 from graph_generator.type_lattice_generator import TypeLatticeGenerator
 
 
@@ -71,6 +74,18 @@ class TestGraphGenerator(unittest.TestCase):
         self.assertEqual(11, g['nodes'].count('comprehension'))
         self.assertEqual(8, g['nodes'].count('ListComp'))
         self._validate_all(g)
+
+    def test_sanity_on_large_corpus(self):
+        fnames = [fname for fname in iglob('../test_data/test_repositories/**/*.py', recursive=True)]
+        for fname in tqdm(fnames):
+            try:
+                g = self.__get_generated_graph(fname)
+                self._validate_all(g)
+            except SyntaxError:
+                pass
+            except Exception as e:
+                print(f'Failed on {fname}')
+                raise e
 
 
 if __name__ == '__main__':
