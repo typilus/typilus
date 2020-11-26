@@ -1,4 +1,5 @@
 import unittest
+import os
 from glob import iglob
 from typing import Dict
 
@@ -94,6 +95,8 @@ class TestGraphGenerator(unittest.TestCase):
     def test_sanity_on_large_corpus(self):
         fnames = [fname for fname in iglob('../test_data/test_repositories/**/*.py', recursive=True)]
         for fname in tqdm(fnames):
+            if os.path.isdir(fname):
+                continue
             try:
                 g = self.__get_generated_graph(fname)
                 self._validate_all(g)
