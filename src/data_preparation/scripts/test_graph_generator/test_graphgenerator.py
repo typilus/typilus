@@ -1,10 +1,9 @@
 import unittest
-from typing import Dict, Callable, Optional
+from typing import Dict
 
 from dpu_utils.codeutils import split_identifier_into_parts
 
 from graph_generator.graphgenerator import AstGraphGenerator
-from graph_generator.graphgenutils import prettyprint_graph
 from graph_generator.type_lattice_generator import TypeLatticeGenerator
 
 
