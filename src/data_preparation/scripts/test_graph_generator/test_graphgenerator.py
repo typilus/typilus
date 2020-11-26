@@ -100,7 +100,7 @@ class TestGraphGenerator(unittest.TestCase):
             try:
                 g = self.__get_generated_graph(fname)
                 self._validate_all(g)
-            except SyntaxError:
+            except (SyntaxError, UnicodeDecodeError):
                 pass
             except Exception as e:
                 print(f'Failed on {fname}')
