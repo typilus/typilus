@@ -454,6 +454,11 @@ class Model(ABC):
             cur_chunk_idx = (cur_chunk_idx + 1) % len(open_chunks_info)
             cur_chunk_info = open_chunks_info[cur_chunk_idx]
 
+            # Skip empty chunks
+            if len(cur_chunk_info.sample_idx_list) == 0:
+                del (open_chunks_info[cur_chunk_idx])
+                continue
+
             # Get next sample:
             cur_sample = cur_chunk_info.data[cur_chunk_info.sample_idx_list[cur_chunk_info.samples_used_so_far[0]]]
             cur_batch_data['samples_in_batch'] += 1
