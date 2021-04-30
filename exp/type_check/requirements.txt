@@ -36,5 +36,5 @@ tqdm==4.40.2
 typed-ast==1.4.0
 typed-astunparse==2.1.4
 typing-extensions==3.7.4.1
-urllib3==1.25.7
+urllib3==1.25.8
 version-query==1.0.5
