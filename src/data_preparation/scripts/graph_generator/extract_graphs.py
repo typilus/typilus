@@ -91,7 +91,7 @@ def explore_files(root_dir: str, duplicates_to_remove: Set[str], monitoring: Mon
 
 def main(arguments):
     try:
-        start_time = time.clock()
+        start_time = time.process_time()
         print("Exploring folders ...")
         walk_dir = arguments['SOURCE_FOLDER']
         monitoring = Monitoring()
@@ -136,7 +136,7 @@ def main(arguments):
             except:
                 pass
 
-    print("\nExecution in: ", time.clock() - start_time, " seconds")
+    print("\nExecution in: ", time.process_time() - start_time, " seconds")
 
 
 
