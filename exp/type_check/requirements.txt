@@ -3,7 +3,7 @@ attrs==19.3.0
 azure-common==1.1.23
 azure-nspkg==3.0.2
 azure-storage==0.36.0
-certifi==2019.11.28
+certifi==2022.12.7
 cffi==1.13.2
 chardet==3.0.4
 cryptography==3.3.2
